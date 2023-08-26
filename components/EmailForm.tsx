@@ -8,7 +8,7 @@ const EmailForm: React.FC = () => {
 
   const handleSendEmail = async () => {
     try {
-      await axios.post('http://localhost:4000/email/send', { recipient, subject, text });
+      await axios.post('https://email-backend-py8v.onrender.com/email/send', { recipient, subject, text });
      
     } catch (error) {
       console.error('Error sending email:', error);
