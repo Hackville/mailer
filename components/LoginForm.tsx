@@ -6,10 +6,12 @@ const LoginForm: React.FC = () => {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loginSuccess, setLoginSuccess] = useState(false); // Added state for login success
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [loading, setLoading] = useState(false); // Added state for loading
 
   const handleLogin = async () => {
     try {
+      setLoading(true); // Set loading to true on click
       const response = await axios.post('https://email-backend-py8v.onrender.com/auth/login', {
         username,
         password,
@@ -22,10 +24,12 @@ const LoginForm: React.FC = () => {
       );
 
       localStorage.setItem('isLoggedIn', 'true');
-      setLoginSuccess(true); // Set login success status
+      setLoginSuccess(true);
       router.push('/email');
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false); // Reset loading after login attempt
     }
   };
 
@@ -53,8 +57,8 @@ const LoginForm: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button className="btn btn-primary w-100" onClick={handleLogin}>
-          Login
+        <button className="btn btn-primary w-100" onClick={handleLogin} disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
         </button>
         {loginSuccess && (
           <div className="alert alert-success mt-3" role="alert">
