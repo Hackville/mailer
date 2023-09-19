@@ -2,16 +2,29 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const EmailForm: React.FC = () => {
-  const [recipient, setRecipient] = useState('');
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
   const [subject, setSubject] = useState('');
   const [text, setText] = useState('');
+  const [sending, setSending] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   const handleSendEmail = async () => {
     try {
-      await axios.post('https://email-backend-py8v.onrender.com/email/send', { recipient, subject, text });
-     
+      setSending(true);
+      await axios.post('https://email-backend-py8v.onrender.com/email/send', { from, to, subject, text });
+      setEmailSent(true);
+      setFrom('');
+      setTo(''); // Reset 'to' field
+      setSubject(''); // Reset 'subject' field
+      setText(''); // Reset 'text' field
+      setTimeout(() => {
+        setEmailSent(false); // Hide the success message after 5 seconds
+      }, 5000);
     } catch (error) {
       console.error('Error sending email:', error);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -19,13 +32,23 @@ const EmailForm: React.FC = () => {
     <div className="container mt-5">
       <h2 className='text-center'>Compose mail</h2>
       <div className="mb-3">
+        <label className="form-label">From</label>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="From"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
+      </div>
+      <div className="mb-3">
         <label className="form-label">Recipient</label>
         <input
           type="email"
           className="form-control"
           placeholder="Recipient"
-          value={recipient}
-          onChange={(e) => setRecipient(e.target.value)}
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
         />
       </div>
       <div className="mb-3">
@@ -49,8 +72,13 @@ const EmailForm: React.FC = () => {
         />
       </div>
       <button className="btn btn-primary" onClick={handleSendEmail}>
-        Send Email
+        {sending ? 'Sending...' : 'Send Email'}
       </button>
+      {emailSent && (
+        <div className="alert alert-success mt-3" role="alert">
+          Email sent successfully!
+        </div>
+      )}
     </div>
   );
 };

@@ -3,33 +3,29 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 
 const LoginForm: React.FC = () => {
-  const router = useRouter(); // Initialize the useRouter hook
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loginSuccess, setLoginSuccess] = useState(false); // Added state for login success
 
   const handleLogin = async () => {
     try {
-      // Make an API call to login
-     
       const response = await axios.post('https://email-backend-py8v.onrender.com/auth/login', {
         username,
         password,
       },
       {
         headers: {
-          'Content-Type': 'application/json', // Set the content type to application/json
-          // You can also add other headers if needed (e.g., authorization)
+          'Content-Type': 'application/json',
         },
       }
       );
-      console.log(response)
-      // If login is successful, set the authentication status in local storage
-      localStorage.setItem('isLoggedIn', 'true');
 
-      // Redirect to the email form page
+      localStorage.setItem('isLoggedIn', 'true');
+      setLoginSuccess(true); // Set login success status
       router.push('/email');
     } catch (error) {
-    console.log(error);
+      console.log(error);
     }
   };
 
@@ -60,6 +56,11 @@ const LoginForm: React.FC = () => {
         <button className="btn btn-primary w-100" onClick={handleLogin}>
           Login
         </button>
+        {loginSuccess && (
+          <div className="alert alert-success mt-3" role="alert">
+            Login successful!
+          </div>
+        )}
       </div>
     </div>
   );
