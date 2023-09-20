@@ -12,7 +12,7 @@ const EmailForm: React.FC = () => {
   const handleSendEmail = async () => {
     try {
       setSending(true);
-      await axios.post('https://email-backend-py8v.onrender.com/email/send', { from, to, subject, text });
+      await axios.post('https://email-backend-pz6o.onrender.com/email/send', { from, to, subject, text });
       setEmailSent(true);
       setFrom('');
       setTo(''); // Reset 'to' field

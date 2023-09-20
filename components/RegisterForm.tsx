@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import Link from 'next/link';
 
-const LoginForm: React.FC = () => {
+const RegisterForm: React.FC = () => {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [RegisterSuccess, setRegisterSuccess] = useState(false);
   const [loading, setLoading] = useState(false); // Added state for loading
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
       setLoading(true); // Set loading to true on click
-      const response = await axios.post('https://email-backend-pz6o.onrender.com/auth/login', {
+      const response = await axios.post('https://email-backend-pz6o.onrender.com/auth/register', {
         username,
         password,
       },
@@ -25,8 +24,8 @@ const LoginForm: React.FC = () => {
       );
 
       localStorage.setItem('isLoggedIn', 'true');
-      setLoginSuccess(true);
-      router.push('/email');
+      setRegisterSuccess(true);
+      router.push('/');
     } catch (error) {
       console.log(error);
     } finally {
@@ -38,7 +37,7 @@ const LoginForm: React.FC = () => {
     <div className="container d-flex align-items-center justify-content-center vh-100">
       <div className="col-md-6">
         <div className="mb-5">
-          <h2 className="text-center">Login</h2>
+          <h2 className="text-center">Register</h2>
           <label className="form-label">Username</label>
           <input
             type="text"
@@ -58,24 +57,17 @@ const LoginForm: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button className="btn btn-primary w-100" onClick={handleLogin} disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
+        <button className="btn btn-primary w-100" onClick={handleRegister} disabled={loading}>
+          {loading ? 'Registering...' : 'Register'}
         </button>
-        {loginSuccess && (
+        {RegisterSuccess && (
           <div className="alert alert-success mt-3" role="alert">
-            Login successful!
+            Signup successful!
           </div>
         )}
-         {/* Registration Link */}
-         <div className="mt-3 text-center">
-          Don't have an account?{' '}
-          <Link href="/signup">
-            Register here
-          </Link>
-        </div>
       </div>
     </div>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
