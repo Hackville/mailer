@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import RegisterForm from '@/components/RegisterForm';
+import RegisterForm from '../components/RegisterForm';
 
 const Home: React.FC = () => {
   return (
