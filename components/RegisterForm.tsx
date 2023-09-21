@@ -23,7 +23,7 @@ const RegisterForm: React.FC = () => {
       }
       );
 
-      localStorage.setItem('isLoggedIn', 'true');
+      
       setRegisterSuccess(true);
       router.push('/');
     } catch (error) {
